@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="onenet_edp_sdk" default="clean" basedir=".">
+	<property name="execute.jar" value="${ant.project.name}.jar" />
+	<property name="src.dir" value="src" />
+	<property name="jar.dir" value="jar" />
+	<property name="build.dir" value="build" />
+	<property name="build_classes.dir" value="${build.dir}/classes" />
+	<property name="lib.dir" value="lib" />
+	
+	<path id="lib.classpath">
+		<pathelement location="${lib.dir}" />
+		<fileset dir="${lib.dir}" includes="**/*.jar">
+		</fileset>
+	</path>
+
+	<target name="prepare" description="">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build_classes.dir}" />
+	</target>
+
+	<target name="compile" depends="prepare" description="compile">
+		<javac encoding="utf8" srcdir="${src.dir}" destdir="${build_classes.dir}" debug="true" source="1.8" target="1.8" includeantruntime="false">
+			<classpath refid="lib.classpath" />
+		</javac>
+	</target>
+
+	<target name="copy" depends="compile" description="copy deployment files">
+		<copy id="copy-file" todir="${build_classes.dir}">
+			<fileset dir="${src.dir}" includes="**/*.properties" />
+		</copy>
+	</target>
+
+	<target name="jar" depends="copy" description="make jar">
+		<jar jarfile="${jar.dir}/onenet_edp_sdk-1.1.0.jar" basedir="${build_classes.dir}">
+			<!--manifest>
+				<attribute name="Main-Class" value="com.smartdata.modbus.test.TestDTU" />
+				<attribute name="Author" value="yonghua" />
+			</manifest>
+			<zipfileset src="${lib.dir}/log4j-1.2.16.jar" />
+			<zipfileset src="${lib.dir}/mongo-2.10.1.jar" /-->
+			<zipfileset src="${lib.dir}/json-20141113.jar" />
+		</jar>
+	</target>
+
+	<target name="clean" depends="jar" description="Remove all">
+		<!--	<delete dir="${build.dir}" />
+		-->
+	</target>
+</project>
