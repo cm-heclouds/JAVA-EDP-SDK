@@ -68,7 +68,7 @@ public class EdpKit {
 		int packetRemainLen = 0;
 		int remainLen = 0;
 		byte firstLen = cache.get();
-		if (firstLen > 127)
+		if (firstLen < 0)
 		{
 			//当消息长度字节大于 1 个字节，消息的长度是可预期的，至少可往后预读取 3 个字节
 			if (packetValidLen <= (startPos + 5))
@@ -77,7 +77,7 @@ public class EdpKit {
 			}
 			
 			byte secondLen = cache.get();
-			if (secondLen <= 127)
+			if (secondLen >= 0)
 			{
 				packetRemainLen = packetValidLen - 3;
 				remainLen = (secondLen << 7) + (firstLen & 0x7F);		
@@ -85,7 +85,7 @@ public class EdpKit {
 			else
 			{
 				byte thirdLen = cache.get();
-				if (thirdLen <= 127)
+				if (thirdLen >= 0)
 				{
 					packetRemainLen = packetValidLen - 4;
 					remainLen = (thirdLen << 14) + ((secondLen & 0x7F) << 7) + (firstLen & 0x7F);
