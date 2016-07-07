@@ -18,6 +18,9 @@ public class Common {
 		public static final byte SAVERESP = (byte)0x90;		//保存确认响应
 		public static final byte PINGREQ = (byte)0xC0;		//心跳请求
 		public static final byte PINGRESP = (byte)0xD0;		//心跳响应
+		public static final byte CMDREQ = (byte)0xA0;		//命令请求
+		public static final byte CMDRESP = (byte)0xB0;		//命令响应
+		public static final byte CONNCLOSE = (byte)0x40;	//连接关闭
 	}
 	
 	//edp 返回码

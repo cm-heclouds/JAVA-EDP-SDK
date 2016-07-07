@@ -156,6 +156,14 @@ public class EdpKit {
 			EdpMsg pingRespMsg = new PingRespMsg();
 			pingRespMsg.unpackMsg(packet.data);
 			return pingRespMsg;
+		case MsgType.CMDREQ:
+			EdpMsg cmdRequestMsg = new CmdRequestMsg();
+			cmdRequestMsg.unpackMsg(packet.data);
+			return cmdRequestMsg;
+		case MsgType.CONNCLOSE:
+			EdpMsg connCloseMsg = new ConnectCloseMsg();
+			connCloseMsg.unpackMsg(packet.data);
+			return connCloseMsg;
 		default:
 			throw new IOException("resolve packet exception. not supported msg_type:" 
 					+ packet.type);
