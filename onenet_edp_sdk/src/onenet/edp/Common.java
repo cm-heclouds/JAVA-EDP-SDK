@@ -21,6 +21,9 @@ public class Common {
 		public static final byte CMDREQ = (byte)0xA0;		//命令请求
 		public static final byte CMDRESP = (byte)0xB0;		//命令响应
 		public static final byte CONNCLOSE = (byte)0x40;	//连接关闭
+		public static final byte UPDATEREQ = (byte)0x50;	//上报固件信息
+		public static final byte UPDATERESP = (byte)0x60;	//下发固件信息
+		public static final byte TUNNEL = (byte)0x70;		//透传第三方平台数据
 	}
 	
 	//edp 返回码

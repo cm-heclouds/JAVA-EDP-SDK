@@ -134,39 +134,46 @@ public class EdpKit {
 		}
 		
 		//解析报文
-		switch (packet.type)
-		{
-		case MsgType.CONNRESP:
-			EdpMsg connRespMsg = new ConnectRespMsg();
-			connRespMsg.unpackMsg(packet.data);
-			return connRespMsg;
-		case MsgType.PUSHDATA:
-			EdpMsg pushDataMsg = new PushDataMsg();
-			pushDataMsg.unpackMsg(packet.data);
-			return pushDataMsg;
-		case MsgType.SAVEDATA:
-			EdpMsg saveDataMsg = new SaveDataMsg();
-			saveDataMsg.unpackMsg(packet.data);
-			return saveDataMsg;
-		case MsgType.SAVERESP:
-			EdpMsg saveRespMsg = new SaveRespMsg();
-			saveRespMsg.unpackMsg(packet.data);
-			return saveRespMsg;
-		case MsgType.PINGRESP:
-			EdpMsg pingRespMsg = new PingRespMsg();
-			pingRespMsg.unpackMsg(packet.data);
-			return pingRespMsg;
-		case MsgType.CMDREQ:
-			EdpMsg cmdRequestMsg = new CmdRequestMsg();
-			cmdRequestMsg.unpackMsg(packet.data);
-			return cmdRequestMsg;
-		case MsgType.CONNCLOSE:
-			EdpMsg connCloseMsg = new ConnectCloseMsg();
-			connCloseMsg.unpackMsg(packet.data);
-			return connCloseMsg;
-		default:
-			throw new IOException("resolve packet exception. not supported msg_type:" 
-					+ packet.type);
+		switch (packet.type) {
+			case MsgType.CONNRESP:
+				EdpMsg connRespMsg = new ConnectRespMsg();
+				connRespMsg.unpackMsg(packet.data);
+				return connRespMsg;
+			case MsgType.PUSHDATA:
+				EdpMsg pushDataMsg = new PushDataMsg();
+				pushDataMsg.unpackMsg(packet.data);
+				return pushDataMsg;
+			case MsgType.SAVEDATA:
+				EdpMsg saveDataMsg = new SaveDataMsg();
+				saveDataMsg.unpackMsg(packet.data);
+				return saveDataMsg;
+			case MsgType.SAVERESP:
+				EdpMsg saveRespMsg = new SaveRespMsg();
+				saveRespMsg.unpackMsg(packet.data);
+				return saveRespMsg;
+			case MsgType.PINGRESP:
+				EdpMsg pingRespMsg = new PingRespMsg();
+				pingRespMsg.unpackMsg(packet.data);
+				return pingRespMsg;
+			case MsgType.CMDREQ:
+				EdpMsg cmdRequestMsg = new CmdRequestMsg();
+				cmdRequestMsg.unpackMsg(packet.data);
+				return cmdRequestMsg;
+			case MsgType.CONNCLOSE:
+				EdpMsg connCloseMsg = new ConnectCloseMsg();
+				connCloseMsg.unpackMsg(packet.data);
+				return connCloseMsg;
+			case MsgType.UPDATERESP:
+				EdpMsg updateRespMsg = new UpdateRespMsg();
+				updateRespMsg.unpackMsg(packet.data);
+				return updateRespMsg;
+			case MsgType.TUNNEL:
+				EdpMsg tunnelMsg = new TunnelMsg();
+				tunnelMsg.unpackMsg(packet.data);
+				return tunnelMsg;
+			default:
+				throw new IOException("resolve packet exception. not supported msg_type:"
+						+ packet.type);
 		}	
 	}
 	
@@ -177,8 +184,7 @@ public class EdpKit {
 	 */
 	public List<EdpMsg> unpack(byte[] packet){
 		List<EdpMsg> msgList = new ArrayList<EdpMsg>();
-		if (packet == null || packet.length <= 0)
-		{
+		if (packet == null || packet.length <= 0) {
 			return null;
 		}
 		
@@ -193,25 +199,20 @@ public class EdpKit {
 		//查看包的长度是否偏少(包至少两个字节)		
 		EdpPacket recvPacket = null;
 		cache.flip();	//回调指针，准备数据读取
-		while ((recvPacket = popPacket()) != null)
-		{
+		while ((recvPacket = popPacket()) != null) {
 			try {
 				EdpMsg msg = resolvePacket(recvPacket);
-				if (msg != null)
-				{
+				if (msg != null) {
 					msgList.add(msg);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
 		}
 		
 		if (msgList.size() == 0){
 			return null;
-		}
-		else
-		{
+		} else {
 			return msgList;
 		}
 	}

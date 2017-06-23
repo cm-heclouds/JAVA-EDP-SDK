@@ -220,7 +220,7 @@ public class SaveDataMsg extends EdpMsg{
 	
 	/**
 	 * unpack save data msg
-	 * @param packet
+	 * @param msgData
 	 * @see onenet.edp.EdpMsg#unpackMsg(byte[])
 	 * @throws IOException
 	 */

@@ -1,4 +1,4 @@
-package test;
+package onenet.edp;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,9 +7,7 @@ import java.net.Socket;
 import java.util.Date;
 import java.util.List;
 
-import onenet.edp.*;
 import onenet.edp.Common.MsgType;
-
 import onenet.edp.ConnectMsg;
 import onenet.edp.ConnectRespMsg;
 import onenet.edp.EdpKit;
@@ -18,9 +16,7 @@ import onenet.edp.PingMsg;
 import onenet.edp.PushDataMsg;
 import onenet.edp.SaveDataMsg;
 import onenet.edp.SaveRespMsg;
-import onenet.edp.SoftInfo;
-import onenet.edp.UpdateMsg;
-import onenet.edp.UpdateRespMsg;
+
 import org.json.JSONObject;
 
 public class Test {
@@ -66,7 +62,7 @@ public class Test {
 		//test sdk
 		//与服务器建立socket连接
 		//online
-		String serverIp = "jjfaedp.hedevice.com";
+		String serverIp = "172.19.3.85";
 		int serverPort = 876;
 		Socket socket = new Socket(serverIp, serverPort);
 		socket.setSoTimeout(60 * 1000);		//设置超时时长为一分钟
@@ -74,8 +70,8 @@ public class Test {
 		OutputStream outStream = socket.getOutputStream();
 		
 		//向服务器发送连接请求
-		int devId = 24305;								//***用户请使用自己的设备ID***
-		String devKey = "uKZdh8YaynK4BKRZ3rD8VCIYyXU";	//***用户请使用自己的设备的鉴权key***
+		int devId = 120319;								//***用户请使用自己的设备ID***
+		String devKey = "GWI0ibbtJzjZlOMXSVThK3ZLFiA=";	//***用户请使用自己的设备的鉴权key***
 		ConnectMsg connectMsg = new ConnectMsg();
 		byte[] packet = connectMsg.packMsg(devId, devKey);
 		//若需要提供userId或edp超时时长，可参考一下方法
@@ -121,7 +117,8 @@ public class Test {
 			System.arraycopy(readBuffer, 0, recvPacket, 0, readSize);
 			log("[ping responce]packet:" + byteArrayToString(recvPacket));
 		}
-		
+
+		/*
 		//向服务器发送转发数据
 		for (int i = 0; i < 5; i++) {
 			int desDevId = 23387;			//***用户请使用自己的目标设备ID***
@@ -206,37 +203,16 @@ public class Test {
 				break;
 			}
 		}
+		*/
 
-		//固件信息消息示例
-		//上报固件信息
-		UpdateMsg updateMsg = new UpdateMsg();
-		outStream.write(updateMsg.packMsg(new SoftInfo("soft1", "1.0.SNAPSHORT")), new SoftInfo("soft2", "2.0")));
-		log("finish send update msg");
-		//接收平台下发的固件信息，前提是平台下发了该信息
-		readSize = inStream.read(readBuffer);
-		if (readSize > 0) {
-			byte[] recvPacket = new byte[readSize];
-			System.arraycopy(readBuffer, 0, recvPacket, 0, readSize);
-			List<EdpMsg> msgs = kit.unpack(recvPacket);
-			for(EdpMsg msg : msgs) {
-				if (msg.getMsgType() == MsgType.UPDATERESP) {
-					UpdateRespMsg updateRespMsg = (UpdateRespMsg) msg;
-					log("receive soft info size" + updateRespMsg.getSoftInfos().size());
-				}
-			}
-		} else {
-			log("not receive data");
-		}
-
-		//发送和接收透传第三方数据示例
-		//发送透传数据
 		TunnelMsg tunnelMsg = new TunnelMsg();
 		for (int i = 0; i < 10; i++) {
 			outStream.write(tunnelMsg.packMsg("svr_name1", ("test by yonghua " + i).getBytes()));
 			log("tunnel msg " + i);
 			Thread.sleep(2000);
 		}
-		//接收透传数据，使用前提，接收之前，第三方服务需要下发透传数据
+
+//		Thread.sleep(3000);
 		readSize = inStream.read(readBuffer);
 		if (readSize > 0) {
 			byte[] recvPacket = new byte[readSize];
@@ -251,7 +227,7 @@ public class Test {
 		} else {
 			log("not receive data");
 		}
-		
+
 		//关闭socket连接
 		socket.close();
 		inStream.close();
