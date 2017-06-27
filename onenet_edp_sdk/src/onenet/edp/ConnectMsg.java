@@ -19,13 +19,13 @@ public class ConnectMsg extends EdpMsg
 	
 	/**
 	 * 封装edp连接请求的消息报文
-	 * @param deviceId device id
-	 * @param userId user id
+	 * @param deviceId device id. if don't set deviceId, set 0.
+	 * @param productId product id. if don't set productId, set 0.
 	 * @param authInfo authentication information (e.g. master-key)
 	 * @param connectTimeout connect timeout
 	 * @return packet
 	 */
-	public byte[] packMsg(int deviceId, int userId, String authInfo, short connectTimeout)
+	public byte[] packMsg(int deviceId, int productId, String authInfo, short connectTimeout)
 	{
 		if (authInfo == null)
 		{
@@ -42,7 +42,7 @@ public class ConnectMsg extends EdpMsg
 		data.put((byte)0x01);
 		
 		//连接标志
-		if (userId > 0)
+		if (productId > 0)
 		{
 			data.put((byte)0xC0);
 		}
@@ -68,9 +68,9 @@ public class ConnectMsg extends EdpMsg
 		}
 		
 		//用户ID
-		if (userId > 0)
+		if (productId > 0)
 		{
-			String userIdStr = "" + userId;
+			String userIdStr = "" + productId;
 			short strLen = (short)userIdStr.length();
 			data.putShort(strLen);
 			data.put(userIdStr.getBytes());
@@ -86,22 +86,21 @@ public class ConnectMsg extends EdpMsg
 		data.flip();
 		data.get(packet);
 		
-		byte[] edpPkg = packPkg(packet);
-		return edpPkg;
+		return packPkg(packet);
 	}
 	
 	/**
 	 * 封装edp连接请求的消息报文
-	 * @param deviceId device id
-	 * @param userId user id. if don't set userId, set 0.
+	 * @param deviceId device id. if don't set deviceId, set 0.
+	 * @param productId product id.
 	 * @param authInfo authentication information (e.g. master-key)
 	 * @return packet
 	 */
-	public byte[] packMsg(int deviceId, int userId, String authInfo)
+	public byte[] packMsg(int deviceId, int productId, String authInfo)
 	{
-		return packMsg(deviceId, userId, authInfo, (short)300);	//默认时间设置为5分钟
+		return packMsg(deviceId, productId, authInfo, (short)300);	//默认时间设置为5分钟
 	}
-	
+
 	/**
 	 * 封装edp连接请求的消息报文
 	 * @param deviceId device id
