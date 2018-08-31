@@ -66,7 +66,7 @@ public class Test {
 		//test sdk
 		//与服务器建立socket连接
 		//online
-		String serverIp = "jjfaedp.hedevice.com";
+		String serverIp = "edp接入机ip";
 		int serverPort = 876;
 		Socket socket = new Socket(serverIp, serverPort);
 		socket.setSoTimeout(60 * 1000);		//设置超时时长为一分钟
@@ -74,8 +74,8 @@ public class Test {
 		OutputStream outStream = socket.getOutputStream();
 		
 		//向服务器发送连接请求
-		int devId = 24305;								//***用户请使用自己的设备ID***
-		String devKey = "uKZdh8YaynK4BKRZ3rD8VCIYyXU";	//***用户请使用自己的设备的鉴权key***
+		int devId = 123;		   //***用户请使用自己的设备ID***
+		String devKey = "设备鉴权key";	//***用户请使用自己的设备的鉴权key***
 		ConnectMsg connectMsg = new ConnectMsg();
 		byte[] packet = connectMsg.packMsg(devId, devKey);
 		//若需要提供userId或edp超时时长，可参考一下方法
